@@ -1,0 +1,126 @@
+<slider>
+    <div class="range" onmousedown="{onmousedown}" onmouseup="{onmouseup}" onmouseleave="{onmouseleave}" onclick="{onclick}">
+        <div class="track"></div>
+        <div class="mark"  ondragstart="return false"   style="left:{x}px" data-value="{value}" data-post="{postfix}"></div>
+        <input type="hidden" name="{input_name}" value="{value}">
+    </div>
+    <script>
+        this.x = 0;
+        this.max = 100;
+        this.multi = 1;
+        this.value = 0;
+
+        this.input_name = this.opts.name;
+        this.postfix = this.opts.postfix;
+
+        if(this.opts.max != undefined){
+            this.max = this.opts.max ;
+            this.multi = parseInt(this.opts.max)/100;
+        }
+
+
+
+
+
+        this.on('mount', function() {
+            var range_wrap = this.root.childNodes[0];
+            var mark = range_wrap.querySelector('.mark');
+            this.max_x = range_wrap.clientWidth - mark.clientWidth;
+            if(this.opts.value != undefined){
+                this.value = parseInt(this.opts.value);
+                var start_value = (this.value/this.opts.max)*this.max_x;
+                this.x = start_value;
+            } else {
+                this.multi = 1;
+            }
+            this.update();
+
+        })
+
+        this.on('update',function(){
+            cur_value = parseInt((this.x /(this.max_x/101))*this.multi)
+            if(cur_value>this.max){
+                this.value = this.max;
+            } else {
+                this.value = cur_value;
+            }
+        })
+        onmousedown(e){
+            var self  =this;
+            if(e.target.className == 'mark'){
+                this.root.onmousemove = function(e){
+                    var diff = self.x+e.movementX;
+                    if(diff>0 && diff<self.max_x){
+                        self.x = diff
+                        self.update()
+                    }
+                }
+            } else {
+                var diff = e.layerX
+                if(diff>0 && diff<self.max_x){
+                    self.x = diff
+                    self.update
+                }
+                if(diff>=self.max_x){
+                    self.x = self.max_x-1;
+                    self.update();
+                }
+            }
+
+        }
+
+        onmouseleave(e){
+            this.root.onmousemove = null;
+        }
+
+        onmouseup(e){
+            this.root.onmousemove = null
+        }
+
+    </script>
+    <style>
+        .range{
+            position: relative;
+            width: 500px;
+            height: 30px;
+            padding-bottom:40px;
+
+        }
+        .range:hover{
+            cursor: pointer;
+        }
+        .range .mark{
+            position: absolute;
+            left:0;
+            top:50%;
+            margin-top:-15px;
+            height: 30px;
+            width:30px;
+            bottom:0;
+            background-color: red;
+            /*transition: all 0.1s;*/
+        }
+        .range .mark:after{
+            content: attr(data-value) attr(data-post);
+            position: absolute;
+            top:100%;
+            right:0;
+            left:0;
+            width:100px;
+        }
+        .range .mark:hover{
+            cursor: pointer;
+        }
+        .range .track{
+            height:6px;
+            background-color: #333;
+            position: absolute;
+            top:50%;
+            margin-top:-3px;
+            bottom:0;
+            left:0;
+            right:0;
+        }
+    </style>
+
+</slider>
