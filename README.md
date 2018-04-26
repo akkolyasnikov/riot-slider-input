@@ -22,9 +22,9 @@ CUSTOM range input  с использованием библиотеки riot.js
 
 Описывать параметры не вижу смысла, они очевидны
 
-<slider 
+slider 
   name="FIELDS[square]" 
   value="12" 
   max="120" 
   postfix=" м²">
-</slider>
+/slider>
