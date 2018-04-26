@@ -18,10 +18,6 @@
             this.multi = parseInt(this.opts.max)/100;
         }
 
-
-
-
-
         this.on('mount', function() {
             var range_wrap = this.root.childNodes[0];
             var mark = range_wrap.querySelector('.mark');
@@ -38,7 +34,7 @@
         })
 
         this.on('update',function(){
-            cur_value = parseInt((this.x /(this.max_x/101))*this.multi)
+            var cur_value = parseInt((this.x /(this.max_x/101))*this.multi)
             if(cur_value>this.max){
                 this.value = this.max;
             } else {
@@ -98,7 +94,7 @@
             width:30px;
             bottom:0;
             background-color: red;
-            /*transition: all 0.1s;*/
+            transition: all 0.1s;
         }
         .range .mark:after{
             content: attr(data-value) attr(data-post);
